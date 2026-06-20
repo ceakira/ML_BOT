@@ -11,12 +11,13 @@ url_base = "https://www.mercadolivre.com.br/ofertas"
 produtos_por_pagina = 48
 pagina_atual = 1
 
+
 while True:
     if pagina_atual == 1:
         url_final = url_base
     else:
         desde = ((pagina_atual - 1) * produtos_por_pagina) + 1
-        url_final = f"{url_base}_Desde_{desde}"
+        url_final = f"{url_base}?page={pagina_atual}"
 
     print(f"Acessando: {url_final}")
     
@@ -32,6 +33,7 @@ while True:
         # 1. Captura as listas de títulos e links usando as classes corretas do ML
         tags_descricao = site.find_all('h3', class_='poly-component__title-wrapper')
         tags_links = site.find_all('a', class_="poly-component__title")
+        tags_images = site.find_all('img', class_='poly-component__picture')
         
         # Se não encontrar títulos, encerra
         if not tags_descricao:
@@ -42,7 +44,7 @@ while True:
         print("-" * 40)
         
         # 2. O ZIP junta a lista de títulos e a lista de links na mesma iteração
-        for tag_titulo, tag_link in zip(tags_descricao, tags_links):
+        for tag_titulo, tag_link, tag_images in zip(tags_descricao, tags_links, tags_images):
             titulo = tag_titulo.get_text(strip=True)
             
             # Pega o atributo 'href' da tag <a> de forma segura
@@ -50,11 +52,14 @@ while True:
             
             print(f"📌 {titulo}")
             print(f"🔗 {link}")
+            print(f"🖼️ {tag_images.get('src', 'Imagem não encontrada')}")
             print("-" * 20)
             
         print("-" * 40)
         
         # Avança para a próxima página
+        if pagina_atual >= 3:  # Limite de páginas para evitar bloqueios
+            break
         pagina_atual += 1
         
         # Pausa recomendada para evitar bloqueios
