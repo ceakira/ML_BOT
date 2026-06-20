@@ -1,0 +1,6 @@
+2026/06/20-13:34:19.855 6018 Reusing MANIFEST C:\Users\tolij\bot monitoramento\microsoft_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/06/20-13:34:19.855 6018 Recovering log #4
+2026/06/20-13:34:19.856 6018 Reusing old log C:\Users\tolij\bot monitoramento\microsoft_profile\Default\EdgeCoupons/coupons_data.db/000004.log 
+2026/06/20-13:34:19.881 1378 Level-0 table #8: started
+2026/06/20-13:34:19.883 1378 Level-0 table #8: 682784 bytes OK
+2026/06/20-13:34:19.885 1378 Delete type=0 #4

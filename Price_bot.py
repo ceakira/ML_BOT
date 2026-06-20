@@ -49,7 +49,8 @@ while True:
             
             # Pega o atributo 'href' da tag <a> de forma segura
             link = tag_link.get('href', 'Link não encontrado')
-            
+            # Pega o atributo 'src' da tag <img> de forma segura
+            # Adicionar o desconto
             print(f"📌 {titulo}")
             print(f"🔗 {link}")
             print(f"🖼️ {tag_images.get('src', 'Imagem não encontrada')}")

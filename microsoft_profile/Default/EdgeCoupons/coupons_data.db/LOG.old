@@ -1,0 +1,5 @@
+2026/06/20-13:26:40.557 4684 Creating DB C:\Users\tolij\bot monitoramento\microsoft_profile\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/06/20-13:26:40.666 4684 Reusing MANIFEST C:\Users\tolij\bot monitoramento\microsoft_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/06/20-13:26:41.278 4ae8 Level-0 table #5: started
+2026/06/20-13:26:41.282 4ae8 Level-0 table #5: 682681 bytes OK
+2026/06/20-13:26:41.285 4ae8 Delete type=0 #3
