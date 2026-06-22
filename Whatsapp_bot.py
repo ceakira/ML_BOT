@@ -10,10 +10,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from rich.console import Console
 from config import MICROSOFT_PROFILE_PATH
+import re 
+from llm_service import LLMService
 
+#===================================================================================================================
+
+# Bot de Atendimento WhatsApp usando Selenium e Ollama para análise de humor e sugestões de resposta
+
+# O bot é projetado para ser um MVP (Produto Mínimo Viável) e pode ser expandido com mais funcionalidades no futuro, como:
+# ======================== NECESSARIO, AJUSTAR O NAVEGADOR ========================================================
 
 console = Console()
-
+global texto_digitado_ate_agora
 class WhatsAppBot:
     def __init__(self, target_name):
         self.target_name = target_name
@@ -114,6 +122,7 @@ class WhatsAppBot:
             '//p[@class="selectable-text copyable-text x15bjb6t x1n2onr6"]' # Fallback caso seja input também
         ]
         
+        #seleciona o campo de texto do chat, tentando múltiplos seletores para garantir compatibilidade
         chat_box = None
         for xpath in input_selectors:
             try:
@@ -131,29 +140,65 @@ class WhatsAppBot:
         if not chat_box:
             raise Exception("Não encontrei o campo de digitação no chat. Tente clicar no campo de texto para ver se o bot assume.")
 
+        texto_digitado_ate_agora = ""
         # Digita a mensagem
         for char in message:
-            chat_box.send_keys(char)
+
+            for i, char in enumerate(message):
+                    chat_box.send_keys(char)
+                    texto_digitado_ate_agora += char
         
-        time.sleep(0.5)
+                          # 1. TRATAMENTO DA QUEBRA DE LINHA
+                    if char == '\n\n':
+                        # Aperta SHIFT + ENTER para pular a linha no WhatsApp sem enviar
+                        chat_box.send_keys(Keys.SHIFT, Keys.ENTER)
+                            # Zera a memória de letras porque fomos para uma nova linha
+                        texto_digitado_ate_agora = "" 
+                        continue # Pula para a próxima letra do laço
+
+                                # Novo Regex: Procura por :palavra no final do texto (sem : no final)
+                    match = re.search(r':([a-zA-Z0-9_+-]+)$', texto_digitado_ate_agora)
+                                
+                    if match:
+                        codigo_encontrado = match.group(0) # Ex: ":fire"
+                        
+                        # Verifica se a palavra que o bot digitou está no seu dicionário (config_emojis)
+                        if codigo_encontrado in LLMService.WHATSAPP_SAFE_EMOJIS.values():
+                            
+                            # Verifica se é a hora certa de apertar ENTER (se a palavra acabou)
+                            eh_final_da_mensagem = (i == len(message) - 1)
+                            proxima_letra_eh_espaco = False if eh_final_da_mensagem else (message[i+1] == " ")
+                            
+                            if eh_final_da_mensagem or proxima_letra_eh_espaco:
+                                
+                                # Pausa para o WhatsApp abrir o popup
+                                time.sleep(0.5) 
+                                
+                                # Aperta ENTER para transformar o texto no emoji
+                                chat_box.send_keys(Keys.ENTER)
+                                
+                                # Pausa rápida para estabilizar
+                                time.sleep(0.2)
+                
+        
         chat_box.send_keys(Keys.ENTER)
         console.print(f"[bold green]✔️ Mensagem enviada para {self.target_name}[/bold green]")
 
-    def get_chat_history(self, limit=5):
-        """
-        Lê as últimas mensagens do chat aberto.
-        """
-        # Seletor genérico para os blocos de mensagem no WhatsApp Web novo
-        messages = self.driver.find_elements(By.CLASS_NAME, "message-in")
-        results = []
-        for msg in messages[-limit:]:
-            try:
-                # Tenta extrair o texto limpo da bolha de conversa
-                text = msg.find_element(By.CLASS_NAME, "copyable-text").text
-                results.append(text)
-            except:
-                continue
-        return "\n".join(results)
+#   #  def get_chat_history(self, limit=5):
+#         """
+#         Lê as últimas mensagens do chat aberto.
+#         """
+#         # Configurar seletores para as mensagens, focando em classes comuns de bolhas de conversa
+#       #  messages = self.driver.find_elements(By.CLASS_NAME, "group-message-item")
+#     #    results = []
+#      #   for msg in messages[-limit:]:
+#       #      try:
+#                 # Tenta extrair o texto limpo da bolha de conversa
+#                 text = msg.find_element(By.CLASS_NAME, "copyable-text").text
+#                 results.append(text)
+#             except:
+#                 continue
+#         return "\n".join(results)
 
     def close(self):
         self.driver.quit()

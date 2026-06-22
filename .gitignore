@@ -1,0 +1,5 @@
+# Ignorar o perfil do navegador e dados de sessão
+microsoft_profile/
+
+# Ignorar o ambiente virtual Python (se já não estiver lá)
+venv/
