@@ -141,20 +141,21 @@ class WhatsAppBot:
             raise Exception("Não encontrei o campo de digitação no chat. Tente clicar no campo de texto para ver se o bot assume.")
 
         texto_digitado_ate_agora = ""
-        # Digita a mensagem
-        for char in message:
 
-            for i, char in enumerate(message):
+        
+        # Digita a mensagem
+
+        for i, char in enumerate(message):
                     chat_box.send_keys(char)
                     texto_digitado_ate_agora += char
         
                           # 1. TRATAMENTO DA QUEBRA DE LINHA
-                    if char == '\n\n':
-                        # Aperta SHIFT + ENTER para pular a linha no WhatsApp sem enviar
-                        chat_box.send_keys(Keys.SHIFT, Keys.ENTER)
-                            # Zera a memória de letras porque fomos para uma nova linha
-                        texto_digitado_ate_agora = "" 
-                        continue # Pula para a próxima letra do laço
+                    # if char == '\n':
+                    #     # Aperta SHIFT + ENTER para pular a linha no WhatsApp sem enviar
+                    #     chat_box.send_keys(Keys.SHIFT, Keys.ENTER)
+                    #         # Zera a memória de letras porque fomos para uma nova linha
+                    #     texto_digitado_ate_agora = "" 
+                    #     continue # Pula para a próxima letra do laço
 
                                 # Novo Regex: Procura por :palavra no final do texto (sem : no final)
                     match = re.search(r':([a-zA-Z0-9_+-]+)$', texto_digitado_ate_agora)

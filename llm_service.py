@@ -269,12 +269,20 @@ class LLMService:
        # mensagens = LLMService.products_format_message()
         
         # 2. Passa cada produto pela IA para gerar a mensagem de WhatsApp
-            
+        texto_final = ""
         resposta_ia = LLMService.generate_response_options(message_product)  # Para teste, processa apenas o primeiro produto. Pode ser expandido para todos.
         
         # Restringe apenas aos emojis seguros do WhatsApp
-        texto_final = LLMService.restrict_to_whatsapp_emojis(resposta_ia)
-        print(texto_final)
+        texto = LLMService.restrict_to_whatsapp_emojis(resposta_ia)
+        for i, char in enumerate(texto):
+            if char == "\n":
+                    texto_final += " "
+            else:
+                    texto_final += char
+
+            continue # Pula para a próxima letra do laço
+
+
         return texto_final
             # 3. Exibe a mensagem formatada pela IA (pode ser enviada para
             # print("=== MENSAGEM GERADA PARA O WHATSAPP ===")
