@@ -34,56 +34,54 @@ def ScrapeAndPrint():
             site = BeautifulSoup(response.text, 'html.parser')
             
             # 1. Captura as listas de títulos e links usando as classes corretas do ML
-            tags_descricao = site.find_all('h3', class_='poly-component__title-wrapper')
+            tags_titulo = site.find_all('h3', class_='poly-component__title-wrapper')
             tags_links = site.find_all('a', class_="poly-component__title")
-            tags_images = site.find_all('img', class_='poly-component__picture')
+            tags_highlightML = site.find_all('span', class_="poly-component__highlight")
+            tags_shipping = site.find_all('div', class_="poly-component__shipping")
+            tags_price = site.find_all('span', class_="andes-money-amount andes-money-amount--cents-superscript")
+            tags_discount = site.find_all('span', class_="poly-price__disc_label andes-money-amount__discount poly-price__disc_label--pill")
             
             # Se não encontrar títulos, encerra
-            if not tags_descricao:
+            if not tags_titulo:
                 print("Nenhum produto encontrado nesta página. Fim das ofertas.")
                 break
                 
-            print(f"Sucesso! Encontrados {len(tags_descricao)} produtos na página {pagina_atual}.")
+            print(f"Sucesso! Encontrados {len(tags_titulo)} produtos na página {pagina_atual}.")
             print("-" * 40)
 
+            produtos_lista = []
 
-#Fazer atuializacao do codigo para uma funcao que recebe os parametros e printa as informacoes, para evitar repeticao de codigo
-
-#             print_product_info()
-
-# def print_product_info(tag_titulo, tag_link, tag_images):
-            
-            # 2. O ZIP junta a lista de títulos e a lista de links na mesma iteração
-            for tag_titulo, tag_link, tag_images in zip(tags_descricao, tags_links, tags_images):
-                    
-                        titulo = tag_titulo.get_text(strip=True)
-                        # Pega o atributo 'href' da tag <a> de forma segura
-                        link = tag_link.get('href', 'Link não encontrado')
-                        # Pega o atributo 'src' da tag <img> de forma segura
-                        #imagem = tag_images.get('src', 'Imagem não encontrada')
-                            
-                        # Adiciona o produto à lista como um dicionário
-                        produtos_lista.append({
+# Encaixando tudo no zip:
+            for tag_titulo, tag_link, tag_high, tag_preco, tag_frete, tag_disc in zip(tags_titulo, tags_links, tags_highlightML,  tags_price, tags_shipping, tags_discount):
+                
+                            titulo = tag_titulo.get_text(strip=True)
+                            link = tag_link.get('href', 'Link não encontrado')
+                            highlight = tag_high.get_text(strip=True) if tag_high else ""
+                            preco = tag_preco.get_text(strip=True)
+                            frete = tag_frete.get_text(strip=True)
+                            off = tag_disc.get_text(strip=True)
+                                
+                            # Adiciona o produto à lista como um dicionário
+                            produtos_lista.append({
                                 "titulo": titulo,
                                 "link": link,
+                                "highlight": highlight,
+                                "preco": preco,
+                                "frete": frete,
+                                "discount": off
                             })
-                        if len(produtos_lista) == 3:
-                             break
-                
-                          
+                            
+                            if len(produtos_lista) == 3:
+                                break
 
-                # # Adicionar o desconto
-                # print(f"📌 {titulo}")
-                # print(f"🔗 {link}")
-                # print(f"🖼️ {tag_images.get('src', 'Imagem não encontrada')}")
-                # print("-" * 20)
+            print(produtos_lista)
 
                 
                 
             print("-" * 40)
             
             # Avança para a próxima página
-            if pagina_atual >= 3:  # Limite de páginas para evitar bloqueios
+            if pagina_atual >= 1:  # Limite de páginas para evitar bloqueios
                 break
             pagina_atual += 1
             
@@ -96,3 +94,6 @@ def ScrapeAndPrint():
     
     # Retorna a lista com todos os produtos coletados
     return produtos_lista
+
+if __name__ == "__main__":
+    ScrapeAndPrint()

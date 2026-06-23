@@ -32,10 +32,14 @@ def main():
         for produto in product_data:
             titulo = produto["titulo"]
             link = produto["link"]
+            preco = produto["preco"]
+            highlight = produto["highlight"]
+            frete = produto["frete"]
+            off = produto["discount"]
             
 
             # Corrigir a passagem de dados para a função de geração de resposta, agora passando o título e link formatados
-            message_product = f"Produto: {titulo} Link: {link}"
+            message_product = f"Produto: {titulo} Link: {link} preco: {preco} highlight: {highlight} frete: {frete} desconto: {off}"
             message = LLMService.main(message_product)
 
 

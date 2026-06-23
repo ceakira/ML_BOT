@@ -149,13 +149,15 @@ class WhatsAppBot:
                     chat_box.send_keys(char)
                     texto_digitado_ate_agora += char
         
-                          # 1. TRATAMENTO DA QUEBRA DE LINHA
-                    # if char == '\n':
-                    #     # Aperta SHIFT + ENTER para pular a linha no WhatsApp sem enviar
-                    #     chat_box.send_keys(Keys.SHIFT, Keys.ENTER)
-                    #         # Zera a memória de letras porque fomos para uma nova linha
-                    #     texto_digitado_ate_agora = "" 
-                    #     continue # Pula para a próxima letra do laço
+                        #  1. TRATAMENTO DA QUEBRA DE LINHA
+                    if char == '@':
+                        
+                        chat_box.send_keys(Keys.BACKSPACE)
+
+                        chat_box.send_keys(Keys.SHIFT, Keys.ENTER)
+                        # Zera a memória de letras porque fomos para uma nova linha
+                       
+                        continue # Pula para a próxima letra do laço
 
                                 # Novo Regex: Procura por :palavra no final do texto (sem : no final)
                     match = re.search(r':([a-zA-Z0-9_+-]+)$', texto_digitado_ate_agora)
@@ -167,10 +169,10 @@ class WhatsAppBot:
                         if codigo_encontrado in LLMService.WHATSAPP_SAFE_EMOJIS.values():
                             
                             # Verifica se é a hora certa de apertar ENTER (se a palavra acabou)
-                            eh_final_da_mensagem = (i == len(message) - 1)
-                            proxima_letra_eh_espaco = False if eh_final_da_mensagem else (message[i+1] == " ")
+                            resto_da_mensagem = message[len(texto_digitado_ate_agora):]
+                            proxima_letra_eh_espaco = resto_da_mensagem.startswith(" ")     
                             
-                            if eh_final_da_mensagem or proxima_letra_eh_espaco:
+                            if resto_da_mensagem or proxima_letra_eh_espaco:
                                 
                                 # Pausa para o WhatsApp abrir o popup
                                 time.sleep(0.5) 
@@ -181,7 +183,7 @@ class WhatsAppBot:
                                 # Pausa rápida para estabilizar
                                 time.sleep(0.2)
                 
-        
+        time.sleep(7)
         chat_box.send_keys(Keys.ENTER)
         console.print(f"[bold green]✔️ Mensagem enviada para {self.target_name}[/bold green]")
 

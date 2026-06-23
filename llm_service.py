@@ -8,22 +8,19 @@ class LLMService:
     
     # Emojis seguros para WhatsApp com seus códigos
     WHATSAPP_SAFE_EMOJIS = {
-    "🔞": ":18",
     "🏪": ":24",
-    "🎟": ":admission_ticket",
-    "🛬": ":airplane_arrival",
-    "🛫": ":airplane_departure",
+    "🎟": ":admission",
+    "🛫": ":airplane",
     "🚑": ":ambulance",
     "🎡": ":amusementpark",
     "🎢": ":amusementpark",
     "✳": ":asterisk",
     "⚛": ":atom",
-    "🛄": ":baggage_claim",
+    "🛄": ":baggage",
     "🔋": ":battery",
     "💜": ":bestest",
     "🧔🏻": ":bewhiskered",
     "☣": ":biohazard",
-    "💙": ":blue_heart",
     "🥊": ":boxing",
     "🧠": ":brain",
     "🥦": ":broccoli",
@@ -33,17 +30,17 @@ class LLMService:
     "💺": ":chair",
     "✅": ":checkmark",
     "✔": ":checkmark",
-    "🚆": ":choo_choo",
+    "🚆": ":choo",
     "🚬": ":cigarette",
     "🎪": ":tent",
-    "😙": ":closed_eyes",
+    "😙": ":closed",
     "⚰": ":coffin",
-    "🆒": ":cool_button",
+    "🆒": ":cool",
     "🚁": ":copter",
     "©": ":copyright",
     "❎": ":cross_mark",
     "🚸": ":crossing",
-    "💘": ":heart_with_arrow",
+    "💘": ":heart",
     "🛃": ":customs",
     "🤨": ":distrust",
     "🥁": ":drumsticks",
@@ -54,24 +51,24 @@ class LLMService:
     "💯": ":faith",
     "🤺": ":fencer",
     "⛴": ":ferry",
-    "🚒": ":fire_engine",
-    "🆓": ":free_button",
-    "⛽": ":fuel_pump",
+    "🚒": ":fire",
+    "🆓": ":free",
+    "⛽": ":fuel",
     "⚱": ":funeral",
     "🤭": ":giggle",
     "🦒": ":giraffe",
     "🥍": ":goal",
     "🥅": ":goal",
-    "💚": ":green_heart",
+    "💚": ":green",
     "🎸": ":guitar",
     "#⃣": ":hashtag",
-    "💝": ":heart_with_ribbon",
+    "💝": ":heart",
     "💓": ":heartbeat",
     "💗": ":heartpulse",
     "🦔": ":hedgehog",
     "🛣": ":highway",
-    "🤗": ":hugging_face",
-    "🆔": ":id_button",
+    "🤗": ":hugging",
+    "🆔": ":id",
     "✈": ":jet",
     "🥋": ":judo",
     "🎛": ":knobs",
@@ -107,12 +104,12 @@ class LLMService:
     "🥨": ":pretzel",
     "🥠": ":prophecy",
     "☢": ":radioactive",
-    "🛤": ":railway_track",
+    "🛤": ":railway",
     "♻": ":recycle",
-    "❤": ":red_heart",
+    "❤": ":red",
     "®": ":registered",
     "🎗": ":reminder",
-    "💞": ":revolving_hearts",
+    "💞": ":revolving",
     "🌹": ":rose",
     "🏵": ":rose",
     "⛵": ":sailboat",
@@ -120,18 +117,18 @@ class LLMService:
     "🎷": ":sax",
     "🛵": ":scooter",
     "🛴": ":scooter",
-    "🤫": ":shushing_face",
+    "🤫": ":shushing",
     "🎚": ":slider",
-    "😍": ":smiling_face_with_heart",
+    "😍": ":smiling",
     "🧦": ":sock",
-    "💖": ":sparkling_heart",
+    "💖": ":sparkling",
     "🤮": ":spew",
-    "🕸": ":spider_web",
+    "🕸": ":spider",
     "🎏": ":streamer",
     "🚟": ":suspension",
     "🦖": ":t-rex",
     "⛺": ":tent",
-    "🤔": ":thinking_face",
+    "🤔": ":thinkinge",
     "🙏": ":thx",
     "🧕": ":tichel",
     "🚢": ":titanic",
@@ -146,8 +143,7 @@ class LLMService:
     "⚠": ":warning",
     "🗑": ":waste",
     "♿": ":wheelchair",
-    "💟": ":white_heart",
-    "💛": ":yellow_heart",
+    "💛": ":yellow",
     "🦓": ":zebra"
     }
     
@@ -208,40 +204,41 @@ class LLMService:
         """
         system_prompt = (
             f"""
-            Você é um especialista em copywriting e marketing digital, focado em conversão e vendas pelo WhatsApp.
-            Seu trabalho é atuar como um formatador automático: você receberá dados brutos de uma promoção enviados por um sistema, e sua única função é transformar esses dados em uma mensagem de WhatsApp altamente atrativa e persuasiva.
+           Você é um Copywriter especialista em WhatsApp. Transforme dados brutos em mensagens persuasivas, garantindo a formatação exata para o aplicativo.
 
-            REGRAS DE FORMATAÇÃO E ESTILO:
-            1. Gancho Inicial: Comece sempre com um alerta chamativo que prenda a atenção imediatamente 
-            2. Destaque o Valor: Use negrito do WhatsApp (*texto*) para enfatizar o nome do produto.
-            3. Gatilhos Mentais: Gere senso de urgência ou exclusividade no texto.
-            4. Link de Compra: Inclua o link de compra no final da mensagem, sempre precedido por uma chamada clara para ação (ex: "Confira aqui: [link]").
-            5. Estrutura Arejada: Use quebras de linha entre as frases.
-            6. Call to Action (CTA): Finalize sempre com uma chamada de ação clara apontando para o link de compra.
-            7. Máximo de 2-3 emojis por mensagem para melhor visualização no WhatsApp Web.
-            8. a mensagem deve ser curta e direta, com no máximo 4 linhas de texto (sem contar o link).
-            9. Envie o texto formatado em uma so mensagem, sem dividir em partes.
-            10.use os emojis que estao em {LLMService.WHATSAPP_SAFE_EMOJIS.values()} para deixar a mensagem mais atrativa, mas SEM EXAGEROS (máximo de 2-3 por mensagem).
-            11. use somente pt-br
-            12. evite usar barra invertida + n para fazer a quebra de linha, voce deve fazer essa quebra de linha manualmente
-            13. um exemplo bom de formatacao: 
-            ⚠️ Oferta relâmpago com estoque quase zerado!
+            # DADOS RECEBIDOS:
+            titulo, link, highlight, avaliacao, preco, frete, desconto
 
-            Leve a sua *Smart TV 55" 4K Samsung* com 40% OFF agora.
+            # ESTRUTURA E FORMATAÇÃO OBRIGATÓRIA:
+            (Reproduza a estrutura abaixo rigorosamente. Mantenha os asteriscos '*' exatamente onde estão para ativar o negrito no WhatsApp. Substitua a tag (emoji) por itens da lista permitida).
 
-            Últimas 3 unidades com entrega Full gratuita, vai esgotar em minutos.
+            (emoji) *[highlight]* (emoji) (Se vazio, use: (emoji) *OFERTA RELÂMPAGO* (emoji))
 
-            Garanta a sua antes que o preço suba clicando aqui ⬇️
-            https://produto.mercadolivre.com.br/oferta-tv55
+            (emoji) *[titulo]*
 
-            REGRA ESTRITA DE SAÍDA:
-            Você é um bot de processamento em backend. NUNCA inicie sua resposta com saudações, não converse, não diga "Aqui está sua mensagem". Retorne ÚNICA e EXCLUSIVAMENTE o texto final da promoção.
+            (emoji) *[preco]* [Se houver desconto: (*[desconto]*)]
+            (emoji) [frete] (Se vazio, exclua a linha)
+            (emoji) [avaliacao] (Se vazio, exclua a linha)
+
+            [Crie UMA frase curta e persuasiva gerando urgência] (emoji)
+
+            [link]
+
+            # REGRAS RÍGIDAS (LEIA COM ATENÇÃO):
+            1. NEGRITO (CRÍTICO): É estritamente proibido remover os asteriscos '*'. Eles são essenciais para o layout do WhatsApp.
+            2. EMOJIS: Onde houver a marcação "(emoji)", você DEVE escolher um emoji que faça sentido para a linha, usando ÚNICA e EXCLUSIVAMENTE esta lista: {LLMService.WHATSAPP_SAFE_EMOJIS}.
+            3. ZERO RÓTULOS: Não escreva "Nome do Produto", "Preço:" ou "Detalhes".
+            4. TRATAMENTO DE PREÇO: Se o preço vier quebrado ou com um "R" solto, não tente consertar ou explicar. Apenas coloque a informação exatamente como recebeu.
+            5. ESPAÇAMENTO: Mantenha as quebras de linha reais do template (use Enter).
+
+            # REGRA CRÍTICA DE SAÍDA:
+            Retorne APENAS a mensagem final, pronta para envio. Nenhuma palavra a mais.
             """
         )
         
         payload = {
             "system": system_prompt,     # Chave corrigida para minúsculo
-            "model": "mistral",
+            "model": "llama3",
             "prompt": dados_do_produto,  # Agora passa a variável corretamente sem aspas
             "stream": False,
             "options": {
@@ -276,7 +273,7 @@ class LLMService:
         texto = LLMService.restrict_to_whatsapp_emojis(resposta_ia)
         for i, char in enumerate(texto):
             if char == "\n":
-                    texto_final += " "
+                    texto_final += "@"
             else:
                     texto_final += char
 
