@@ -16,9 +16,6 @@ def main():
     
     console.print(Panel.fit("🤖 Bot de Atendimento WhatsApp (MVP)", style="bold blue"))
 
-
-    product_data = ScrapeAndPrint()
-
     
     bot = WhatsAppBot(FRIEND_NAME)
     
@@ -28,24 +25,27 @@ def main():
         # Inicia a conversa
         bot.find_contact()
         count = 0
-        # Envia cada produto coletado
-        for produto in product_data:
-            titulo = produto["titulo"]
-            link = produto["link"]
-            preco = produto["preco"]
-            highlight = produto["highlight"]
-            frete = produto["frete"]
-            off = produto["discount"]
-            
+        for pagina in range(1, 21):
+            product_data = ScrapeAndPrint(pagina)
 
-            # Corrigir a passagem de dados para a função de geração de resposta, agora passando o título e link formatados
-            message_product = f"Produto: {titulo} Link: {link} preco: {preco} highlight: {highlight} frete: {frete} desconto: {off}"
-            message = LLMService.main(message_product)
+            # Envia cada produto coletado
+            for produto in product_data:
+                titulo = produto["titulo"]
+                link = produto["link"]
+                preco = produto["preco"]
+                highlight = produto["highlight"]
+            #frete = produto["frete"]
+                off = produto["discount"]
+                
+
+                # Corrigir a passagem de dados para a função de geração de resposta, agora passando o título e link formatados
+                message_product = f"Produto: {titulo} Link: {link} preco: {preco} highlight: {highlight}  desconto: {off}"
+                message = LLMService.main(message_product)
 
 
-            count += 1
-            bot.send_message(message)
-            time.sleep(100)  # Pausa para evitar envio muito rápido
+                count += 1
+                bot.send_message(message)
+                time.sleep(100)  # Pausa para evitar envio muito rápido
 
 
     except Exception as e:
